@@ -18,6 +18,7 @@ List of commonly used C++ Standard Library headers, organized by category, with 
 * `sstream`
     Defines classes for **string-based stream I/O**. This allows you to treat a string like an input or output stream.
 * `iomanip` here is a small overview: [iomanip](iomanip/iomanip.md)
+
     Provides definitions for **I/O manipulators**. These are used to format output, such as setting precision or width.
 
 ***
