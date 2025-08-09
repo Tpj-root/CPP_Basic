@@ -4,6 +4,17 @@
 #include <locale>
 #include <ctime>
 
+
+void welcome_message(){
+
+    std::cout << "****************" << std::endl;
+    std::cout << "* #include <iomanip> *" << std::endl;
+    std::cout << "*** iomanip  ***" << std::endl;
+    std::cout << "****************" << std::endl;
+};
+
+
+
 // Demonstrates setw and setfill
 void demonstrate_setw_and_setfill() {
     std::cout << "--- setw & setfill ---" << std::endl;
@@ -13,9 +24,6 @@ void demonstrate_setw_and_setfill() {
     std::cout << std::endl;
 }
 
-#include <iostream>
-#include <string>
-#include <iomanip>
 
 /**
  * @brief Centers a given string within a specified width.
@@ -110,6 +118,7 @@ void demonstrate_put_time() {
 }
 
 int main() {
+    welcome_message();
     demonstrate_setw_and_setfill();
     demonstrate_precision_and_notation();
     demonstrate_boolalpha();

@@ -11,13 +11,16 @@ List of commonly used C++ Standard Library headers, organized by category, with 
 
 ## Input/Output (I/O) ⌨️
 
-* `iostream`
+* `iostream` [iostream](iostream/iostream.md)
+
     Provides definitions for formatted and unformatted **input/output operations**. It includes objects like `cin` for input and `cout` for output.
-* `fstream`
+* `fstream` [fstream](fstream/fstream.md)
+
     Defines classes for **file-based I/O**. It's used for reading from and writing to files on your disk.
-* `sstream`
+* `sstream` [sstream](sstream/sstream.md)
+
     Defines classes for **string-based stream I/O**. This allows you to treat a string like an input or output stream.
-* `iomanip` here is a small overview: [iomanip](iomanip/iomanip.md)
+* `iomanip` [iomanip](iomanip/iomanip.md)
 
     Provides definitions for **I/O manipulators**. These are used to format output, such as setting precision or width.
 

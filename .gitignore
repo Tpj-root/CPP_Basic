@@ -1,0 +1,22 @@
+# This is a sample .gitignore file created by 'need_file_gitignore'.
+# You can add or remove patterns as needed for your specific project.
+
+# Commonly ignored directories
+node_modules/
+dist/
+build/
+
+# Operating System & Editor files
+*.DS_Store
+*.log
+*.swp
+.vscode/
+
+# Sensitive files and environment variables
+.env
+*.env.local
+
+# Python-specific ignores
+__pycache__/
+*.pyc
+
