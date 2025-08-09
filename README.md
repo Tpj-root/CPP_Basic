@@ -11,7 +11,7 @@ List of commonly used C++ Standard Library headers, organized by category, with 
 
 ## Input/Output (I/O) ⌨️
 
-* `iostream` [iostream](iostream/iostream.md)
+* `iostream` [iostream](iostream/iostream.md) [example](iostream/iostream.cpp)
 
     Provides definitions for formatted and unformatted **input/output operations**. It includes objects like `cin` for input and `cout` for output.
 * `fstream` [fstream](fstream/fstream.md)
