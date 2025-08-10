@@ -140,3 +140,12 @@ List of commonly used C++ Standard Library headers, organized by category, with 
     Provides mechanisms to **retrieve results from asynchronous tasks** (tasks running in the background). It allows one thread to wait for a result from another.
 
 
+
+
+There are C++ libraries that make colored console printing easier so you don’t have to remember ANSI codes.
+
+```
+https://github.com/ikalnytskyi/termcolor
+https://github.com/agauniyal/rang
+```
+
