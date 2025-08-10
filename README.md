@@ -197,4 +197,15 @@ https://github.com/agauniyal/rang
 
 
 
+C++ you have several logging libraries available:
+
+* **spdlog** → Fast, header-only, very popular.
+* **glog** (Google Logging) → Good for structured logs and severity levels.
+* **Boost.Log** → Feature-rich but heavier.
+* **easylogging++** → Simple and easy to integrate.
+* **log4cplus** / **log4cpp** → Similar to Java’s log4j style.
+
+```
+https://github.com/gabime/spdlog
+```
 
