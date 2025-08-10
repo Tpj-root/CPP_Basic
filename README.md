@@ -3,6 +3,51 @@ List of common functions and a one-line explanation for each
 
 
 
+Simple **C++ include order best practice** diagram you can follow:
+
+```
++---------------------------------------------------+
+| 1. Your own header for this .cpp file             |
+|    (e.g., "my_class.h")                           |
++---------------------------------------------------+
+| 2. C library headers (if any)                     |
+|    e.g., <cstdio>, <cstdlib>, <cstring>           |
++---------------------------------------------------+
+| 3. C++ standard library headers                   |
+|    Grouped logically:                             |
+|      - <iostream>, <fstream>, <sstream>           |
+|      - <string>, <vector>, <map>, <tuple>         |
+|      - <utility>, <algorithm>, <functional>       |
++---------------------------------------------------+
+| 4. Third-party library headers                    |
+|    e.g., <boost/...>, <fmt/core.h>                |
++---------------------------------------------------+
+| 5. Other project headers                          |
+|    (headers from other parts of your codebase)    |
++---------------------------------------------------+
+```
+
+**Example:**
+
+```cpp
+#include "person.h"      // Own header
+
+#include <iostream>      // Standard IO
+#include <string>        // std::string
+#include <tuple>         // std::tuple, std::tie
+#include <utility>       // std::pair, std::move
+
+#include <boost/algorithm/string.hpp>  // 3rd party
+#include "helpers/log.h"               // Other project headers
+```
+
+💡 **Tips:**
+
+* Always include exactly what you use — don’t depend on indirect includes.
+* Group and space for readability.
+* Order from *most local* (own header) → *most general* (standard lib).
+
+
 
 
 List of commonly used C++ Standard Library headers, organized by category, with a brief explanation for each.
@@ -148,4 +193,8 @@ There are C++ libraries that make colored console printing easier so you don’t
 https://github.com/ikalnytskyi/termcolor
 https://github.com/agauniyal/rang
 ```
+
+
+
+
 
