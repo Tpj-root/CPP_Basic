@@ -209,3 +209,9 @@ C++ you have several logging libraries available:
 https://github.com/gabime/spdlog
 ```
 
+
+MicroShell is a lightweight pure C implementation of shell emulator dedicated for embedded bare-metal systems. 
+```
+https://brennan.io/2015/01/16/write-a-shell-in-c/
+https://github.com/marcinbor85/microshell
+```
