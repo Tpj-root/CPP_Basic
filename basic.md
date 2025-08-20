@@ -6982,3 +6982,832 @@ NOTE: Deleting derived objects through base pointers requires virtual destructor
 End of demo.
 */
 ```
+
+
+
+```
+// All explanations are provided as comments within the code.
+// This is a C++ class template based on a simple BankAccount.
+// It demonstrates how to define a class, its member variables,
+// and its functions (also called methods).
+
+#include <iostream>
+#include <string>
+
+// --- Class Definition ---
+// A class is a blueprint for creating objects.
+// It groups data (member variables) and functions (methods) that
+// operate on that data.
+class BankAccount {
+private:
+    // --- Member Variables (Data) ---
+    // The 'private' access specifier means these variables can only be
+    // accessed by functions inside this class. This is good practice for
+    // data hiding and encapsulation.
+    std::string ownerName;
+    double balance;
+
+public:
+    // --- Constructor ---
+    // A special function that is automatically called when a new object
+    // of the class is created. It is used to initialize the object's state.
+    // The name of the constructor is always the same as the class name.
+    BankAccount(std::string name, double initialBalance) {
+        // This constructor takes a name and an initial balance as arguments.
+        // It sets the private member variables to the values passed in.
+        ownerName = name;
+        balance = initialBalance;
+        std::cout << "Account for " << ownerName << " created with an initial balance of $" << balance << std::endl;
+    }
+
+    // --- Member Functions (Methods) ---
+    // The 'public' access specifier means these functions can be called
+    // from outside the class, allowing you to interact with the object.
+
+    // Function to get the current balance.
+    // This is often called a "getter" function.
+    // It is marked 'const' because it doesn't change the object's state.
+    double getBalance() const {
+        return balance;
+    }
+
+    // Function to get the owner's name.
+    std::string getOwnerName() const {
+        return ownerName;
+    }
+
+    // Function to deposit money into the account.
+    // void: This function does not return any value.
+    // parameter double amount: This is the amount of money to deposit.
+    void deposit(double amount) {
+        // We first check if the amount is positive.
+        if (amount > 0) {
+            balance += amount; // Add the amount to the current balance.
+            std::cout << "Deposited $" << amount << ". New balance is $" << balance << "." << std::endl;
+        } else {
+            std::cout << "Deposit amount must be positive." << std::endl;
+        }
+    }
+
+    // Function to withdraw money from the account.
+    // parameter double amount: The amount to withdraw.
+    // return bool: Returns 'true' if the withdrawal was successful, 'false' otherwise.
+    bool withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount; // Subtract the amount from the balance.
+            std::cout << "Withdrew $" << amount << ". New balance is $" << balance << "." << std::endl;
+            return true;
+        } else if (amount > balance) {
+            std::cout << "Insufficient funds to withdraw $" << amount << "." << std::endl;
+            return false;
+        } else {
+            std::cout << "Withdrawal amount must be positive." << std::endl;
+            return false;
+        }
+    }
+}; // End of the class definition.
+
+// --- Main Function ---
+// This is where the program execution begins.
+int main() {
+    // 1. Create an object (an "instance") of the BankAccount class.
+    // We pass the owner's name and an initial balance to the constructor.
+    BankAccount myAccount("Jane Doe", 500.0);
+
+    // 2. Call the member functions to interact with the object.
+
+    // Call the deposit() function to add money.
+    myAccount.deposit(200.0);
+    myAccount.deposit(-50.0); // This will fail because the amount is negative.
+
+    // Call the getBalance() function to retrieve and display the balance.
+    std::cout << "Current balance for " << myAccount.getOwnerName() << " is $" << myAccount.getBalance() << std::endl;
+
+    // Call the withdraw() function.
+    // We can use the boolean return value to check if the transaction was successful.
+    bool success = myAccount.withdraw(150.0);
+    if (success) {
+        std::cout << "Withdrawal was successful." << std::endl;
+    }
+
+    // Try to withdraw more money than available. This will fail.
+    myAccount.withdraw(1000.0);
+
+    // Get the final balance.
+    std::cout << "Final balance for " << myAccount.getOwnerName() << " is $" << myAccount.getBalance() << std::endl;
+
+    return 0; // The program exits successfully.
+}
+
+
+```
+
+
+
+```
+
+// All explanations are provided as comments within the code.
+// This code demonstrates the fundamental ways to access and
+// manipulate members (data and functions) of a C++ class.
+
+#include <iostream>
+#include <string>
+
+// --- Base Class Definition ---
+// This is our base class, 'Car', which will show how public, private,
+// and protected members are accessed.
+class Car {
+private:
+    // --- Private Members ---
+    // 'private' members are only accessible from within the class itself.
+    // They cannot be accessed directly from an object outside the class or from a
+    // derived class. This is a key principle of encapsulation, hiding data
+    // from external code to prevent unwanted changes.
+    double fuelLevel;
+
+public:
+    // --- Public Members ---
+    // 'public' members are accessible from anywhere. This is where you put
+    // the functions that you want other parts of your program to use to
+    // interact with the object.
+    std::string brand;
+
+    // A public constructor to initialize the object.
+    Car(std::string carBrand) : brand(carBrand), fuelLevel(0.0) {
+        std::cout << "A " << brand << " car object has been created." << std::endl;
+    }
+
+    // A public "getter" function to get the value of a private member.
+    // This provides controlled access to the private data.
+    double getFuelLevel() const {
+        return fuelLevel;
+    }
+
+    // A public "setter" or mutator function to change the value of a
+    // private member. It can include validation logic.
+    void refuel(double amount) {
+        if (amount > 0) {
+            fuelLevel += amount;
+            std::cout << "Refueled with " << amount << " units. Fuel level is now: " << fuelLevel << std::endl;
+        } else {
+            std::cout << "Cannot refuel with a negative or zero amount." << std::endl;
+        }
+    }
+
+protected:
+    // --- Protected Members ---
+    // 'protected' members are similar to private members, but with one key difference:
+    // they are accessible within the class itself AND in any class that
+    // inherits from it (a "derived" class).
+    int numWheels;
+};
+
+// --- Derived Class Definition ---
+// The 'ElectricCar' class inherits from the 'Car' class.
+// This means it gets all the members of the 'Car' class.
+class ElectricCar : public Car {
+public:
+    // The constructor for ElectricCar must call the base class constructor.
+    ElectricCar(std::string carBrand) : Car(carBrand) {
+        // Here, we can access the 'protected' member 'numWheels' from the base class.
+        // We cannot, however, access the 'private' member 'fuelLevel'.
+        numWheels = 4; // This is allowed because 'numWheels' is protected.
+        std::cout << "This electric car has " << numWheels << " wheels." << std::endl;
+    }
+};
+
+// --- Main Function ---
+int main() {
+    // Creating an object of the base class.
+    Car myCar("Toyota");
+
+    // 1. Accessing a PUBLIC member directly.
+    // This is the simplest form of member access.
+    // The 'brand' variable is public, so we can access it directly using the dot (.) operator.
+    std::cout << "My car's brand is: " << myCar.brand << std::endl;
+
+    // 2. Accessing a PRIVATE member using a public function.
+    // The 'fuelLevel' variable is private. The following line would cause a compile-time error:
+    // std::cout << myCar.fuelLevel; // This would fail!
+    // Instead, we use the public 'getFuelLevel()' function to access its value.
+    std::cout << "Initial fuel level: " << myCar.getFuelLevel() << std::endl;
+
+    // Use a public function to modify a private member.
+    myCar.refuel(25.5);
+    std::cout << "Updated fuel level: " << myCar.getFuelLevel() << std::endl;
+    std::cout << std::endl; // Add a new line for better readability.
+
+
+    // Creating an object of the derived class.
+    ElectricCar myElectricCar("Tesla");
+
+    // 3. Accessing a PROTECTED member from a derived class.
+    // The 'numWheels' member is protected in the 'Car' class.
+    // It is not accessible directly from the main function (outside of the classes).
+    // The following would cause a compile-time error:
+    // std::cout << myCar.numWheels; // This would fail!
+    // But it is accessible within the 'ElectricCar' class, as shown in its constructor.
+    
+    // We can still access public members from the base class.
+    std::cout << "My electric car's brand is: " << myElectricCar.brand << std::endl;
+    
+    // We can still access the private 'fuelLevel' using the public 'getFuelLevel()' function.
+    std::cout << "Electric car fuel level: " << myElectricCar.getFuelLevel() << std::endl;
+
+    return 0;
+}
+
+```
+
+
+```
+// All explanations are provided as comments within the code.
+// This example demonstrates two ways to define class member functions in C++.
+// 1. Defining the function inside the class declaration.
+// 2. Defining the function outside the class declaration.
+
+#include <iostream>
+#include <string>
+
+// --- Class Declaration ---
+// This is the blueprint for our 'Student' class.
+class Student {
+public:
+    // --- Public Members ---
+    std::string name;
+    int id;
+
+    // --- Member Function Definitions Inside the Class ---
+    // Defining the function inside the class is common for short, simple functions.
+    // The compiler often treats these as 'inline' functions, which can improve performance.
+    // This is a constructor. It is called automatically when a new Student object is created.
+    // It initializes the 'name' and 'id' member variables.
+    Student(std::string studentName, int studentId) {
+        name = studentName;
+        id = studentId;
+    }
+
+    // A simple getter function to display the student's information.
+    // The definition is placed directly within the class declaration.
+    void displayInfo() const {
+        std::cout << "Student Name: " << name << ", ID: " << id << std::endl;
+    }
+
+    // --- Member Function Declarations for Outside Definition ---
+    // For longer or more complex functions, it is good practice to
+    // declare them inside the class and define them outside.
+    // This keeps the class declaration clean and readable.
+    void enrollInCourse(std::string courseName);
+};
+
+// --- Member Function Definition Outside the Class ---
+// To define a function outside the class, you must use the scope resolution
+// operator (::) to specify which class the function belongs to.
+// The syntax is: ReturnType ClassName::FunctionName(parameters) { ... }
+
+// Function: enrollInCourse
+// Belongs to: the 'Student' class
+// Scope Resolution Operator: ::
+void Student::enrollInCourse(std::string courseName) {
+    // This function adds a new course for the student.
+    // This is an example of a function that might have more complex logic,
+    // so we define it outside the class declaration for clarity.
+    std::cout << name << " has been enrolled in the course: " << courseName << std::endl;
+}
+
+
+// --- Main Function ---
+// This is where the program starts.
+int main() {
+    // Create an object of the Student class.
+    // The constructor is called automatically.
+    Student student1("Alice", 101);
+
+    // Call the member function defined INSIDE the class.
+    student1.displayInfo();
+
+    // Call the member function defined OUTSIDE the class.
+    student1.enrollInCourse("Introduction to C++");
+
+    return 0; // The program exits successfully.
+}
+
+
+```
+
+
+
+
+```
+
+// All explanations are provided as comments within the code.
+// This example demonstrates how to define all member functions
+// directly inside the class declaration.
+
+#include <iostream>
+#include <string>
+
+// --- Class Definition ---
+// This is the blueprint for our 'Book' object.
+class Book {
+private:
+    // --- Member Variables (Data) ---
+    // The 'private' members are only accessible from inside the class.
+    // We hide them to protect the data and ensure it's modified in a controlled way.
+    std::string title;
+    std::string author;
+    int pages;
+
+public:
+    // --- Public Member Functions (Methods) ---
+    // 'public' members are accessible from outside the class.
+    // They are the interface for interacting with the object.
+
+    // 1. Constructor
+    // A special function that is automatically called when a new object is created.
+    // It initializes the object's member variables.
+    // The definition is placed directly inside the class.
+    Book(std::string bookTitle, std::string bookAuthor, int numPages) {
+        title = bookTitle;
+        author = bookAuthor;
+        pages = numPages;
+        std::cout << "A new book '" << title << "' has been created." << std::endl;
+    }
+
+    // 2. Getter Function
+    // A function that returns the value of a private member.
+    // It's a "read-only" function, so we mark it with 'const'.
+    std::string getTitle() const {
+        // The 'return' keyword sends the value of 'title' back to the caller.
+        return title;
+    }
+    
+    // Another getter function.
+    int getPages() const {
+        return pages;
+    }
+
+    // 3. Setter Function
+    // A function that allows a private member to be modified.
+    // This allows us to control how the data is changed.
+    void setPages(int newPages) {
+        // We can add a check to make sure the new value is valid.
+        if (newPages > 0) {
+            pages = newPages;
+            std::cout << "The page count for '" << title << "' has been updated to " << pages << "." << std::endl;
+        } else {
+            std::cout << "Error: Page count must be a positive number." << std::endl;
+        }
+    }
+
+    // 4. Custom Function
+    // This is a function that performs a specific task using the object's data.
+    void describeBook() const {
+        std::cout << "Book Details:" << std::endl;
+        std::cout << "  Title: " << title << std::endl;
+        std::cout << "  Author: " << author << std::endl;
+        std::cout << "  Pages: " << pages << std::endl;
+    }
+}; // End of the class definition.
+
+// --- Main Function ---
+// This is where the program's execution begins.
+int main() {
+    // 1. Create an object (an "instance") of the Book class.
+    // The constructor is called automatically to initialize the object.
+    Book myBook("The C++ Programming Language", "Bjarne Stroustrup", 1376);
+
+    // 2. Call the member functions to interact with the object.
+    
+    // Call the describeBook() function, which uses the private members.
+    myBook.describeBook();
+
+    // Call a getter function to get the title and display it.
+    std::string bookTitle = myBook.getTitle();
+    std::cout << "The title of the book is: " << bookTitle << std::endl;
+
+    // Call a setter function to modify a private member.
+    myBook.setPages(1400);
+
+    // This call will fail because we are passing a negative number.
+    myBook.setPages(-50);
+
+    // Call the custom function again to see the updated information.
+    myBook.describeBook();
+
+    return 0; // The program exits successfully.
+}
+
+```
+
+```
+// All explanations are provided as comments within the code.
+// This example demonstrates how to define a C++ class member
+// function outside the class declaration and make it 'inline'.
+
+#include <iostream>
+#include <string>
+
+// --- Class Declaration ---
+// This is the blueprint for our 'Laptop' class.
+class Laptop {
+public:
+    // --- Public Members ---
+    std::string brand;
+    int ram_gb;
+
+    // A constructor declared inside the class.
+    // Its definition will be placed outside.
+    Laptop(std::string laptopBrand, int laptopRam);
+
+    // A member function declaration.
+    // We will define this function outside the class.
+    void turnOn();
+
+    // A getter function declaration.
+    int getRam() const;
+};
+
+// --- Member Function Definitions Outside the Class ---
+
+// 1. The 'inline' keyword
+// The 'inline' keyword is a hint to the compiler. It suggests that
+// the compiler should try to replace every call to this function
+// with the function's actual code. This can reduce the overhead
+// of a function call, but it's ultimately up to the compiler.
+// It is useful for short, frequently called functions.
+
+// Define the constructor outside the class.
+// We are not using the 'inline' keyword here because constructors are
+// often more complex and inlining them isn't always beneficial.
+Laptop::Laptop(std::string laptopBrand, int laptopRam) {
+    brand = laptopBrand;
+    ram_gb = laptopRam;
+    std::cout << "Laptop '" << brand << "' with " << ram_gb << "GB RAM created." << std::endl;
+}
+
+// 2. Define the 'turnOn' function outside the class with the 'inline' keyword.
+// The syntax is: inline ReturnType ClassName::FunctionName(parameters) { ... }
+inline void Laptop::turnOn() {
+    std::cout << "The " << brand << " laptop is now powered on." << std::endl;
+}
+
+// 3. Define the 'getRam' function outside the class with the 'inline' keyword.
+// This is a great candidate for inlining because it's a very simple function.
+inline int Laptop::getRam() const {
+    return ram_gb;
+}
+
+
+// --- Main Function ---
+// This is where the program starts.
+int main() {
+    // Create an object of the Laptop class.
+    // The constructor is called automatically.
+    Laptop myLaptop("HP", 16);
+
+    // Call the member function that was defined as 'inline' outside the class.
+    myLaptop.turnOn();
+
+    // Call the 'getRam' function and print its return value.
+    int ram = myLaptop.getRam();
+    std::cout << "This laptop has " << ram << "GB of RAM." << std::endl;
+
+    return 0; // The program exits successfully.
+}
+
+
+
+```
+
+
+
+
+```
+// All explanations are provided as comments within the code.
+// This code demonstrates the C++ concept of "nesting" member functions,
+// which means calling one function from another within the same class.
+// This is a powerful way to organize code, promote reusability, and
+// simplify complex tasks.
+
+#include <iostream>
+#include <string>
+
+// --- Class Definition ---
+// We will create a 'SalesOrder' class to show a practical example.
+// The public function will call private helper functions to calculate the final total.
+class SalesOrder {
+private:
+    // --- Private Member Variables ---
+    // These variables store the core data for our object.
+    double basePrice;
+    double taxRate;
+    double shippingCost;
+
+    // --- Private Member Functions ---
+    // These functions are only accessible from within the class itself.
+    // They are "nested" or called by other member functions to perform
+    // specific, internal calculations. This helps to hide the complexity.
+
+    // Function to calculate the tax amount.
+    // This is a private helper function.
+    double calculateTax() const {
+        // We use the 'basePrice' and 'taxRate' to compute the tax.
+        return basePrice * taxRate;
+    }
+
+    // Function to calculate the shipping cost.
+    // This is another private helper function.
+    double getShippingCost() const {
+        // For this example, we return a fixed shipping cost.
+        return shippingCost;
+    }
+
+public:
+    // --- Public Member Functions ---
+    // These functions are the public interface of our class. They are the only
+    // way to interact with the object's private data from the outside.
+
+    // A constructor to initialize our SalesOrder object.
+    SalesOrder(double price, double rate, double shipping) {
+        basePrice = price;
+        taxRate = rate;
+        shippingCost = shipping;
+        std::cout << "Sales order created with a base price of $" << basePrice << "." << std::endl;
+    }
+
+    // This is the main function that performs the complex task.
+    // It "nests" or calls the private helper functions to get its result.
+    double calculateTotal() const {
+        // Step 1: Start with the base price.
+        double total = basePrice;
+
+        // Step 2: Call the 'calculateTax()' helper function.
+        // The return value of this function is added to the total.
+        double taxAmount = calculateTax();
+        total += taxAmount;
+        std::cout << "Tax amount calculated: $" << taxAmount << std::endl;
+
+        // Step 3: Call the 'getShippingCost()' helper function.
+        // The return value is added to the total.
+        double shippingFee = getShippingCost();
+        total += shippingFee;
+        std::cout << "Shipping fee calculated: $" << shippingFee << std::endl;
+
+        // Step 4: Return the final total.
+        return total;
+    }
+};
+
+// --- Main Function ---
+// This is where the program's execution begins.
+int main() {
+    // 1. Create an object of the SalesOrder class.
+    // The constructor is called to initialize the object's data.
+    SalesOrder myOrder(100.0, 0.08, 5.00); // $100 base price, 8% tax, $5 shipping.
+
+    // 2. Call the main public function, which then handles the "nesting" of calls.
+    // We only need to call this one function from our main program.
+    double finalTotal = myOrder.calculateTotal();
+
+    // 3. Display the final result.
+    std::cout << "------------------------------------------" << std::endl;
+    std::cout << "The final total for the order is: $" << finalTotal << std::endl;
+
+    return 0;
+}
+
+
+```
+
+
+
+```
+// All explanations are provided as comments within the code.
+// This example demonstrates how to define and use private member functions
+// in a C++ class. Private functions are an essential part of object-oriented
+// programming for achieving data hiding and encapsulation.
+
+#include <iostream>
+#include <string>
+
+// --- Class Definition ---
+// A 'Robot' class to demonstrate a real-world scenario.
+class Robot {
+private:
+    // --- Private Member Variables ---
+    // These variables store the internal state of the robot.
+    std::string name;
+    double batteryLevel; // In percentage, from 0.0 to 100.0
+
+    // --- Private Member Functions ---
+    // The 'private' keyword means these functions can ONLY be called from
+    // within other functions of this same class.
+    // They are used to perform internal, behind-the-scenes tasks that the
+    // user of the class doesn't need direct access to.
+
+    // This private function performs a complex calculation.
+    // The main program doesn't need to know how this calculation works.
+    double calculateTaskCompletionTime() const {
+        // This is a simplified calculation for demonstration purposes.
+        // The more complex the logic, the more sense it makes to hide it.
+        // A full task might involve multiple steps, so we use a helper function.
+        double baseTime = 10.0;
+        double speedModifier = batteryLevel / 50.0; // Slower if battery is low.
+        return baseTime / speedModifier;
+    }
+
+    // A private helper function to check if the battery is critically low.
+    bool isBatteryLow() const {
+        return batteryLevel < 20.0;
+    }
+
+public:
+    // --- Public Member Functions ---
+    // These functions are the public interface. The main program calls these
+    // to interact with the Robot object. These public functions can, in turn,
+    // call the private helper functions.
+
+    // A constructor to initialize the robot object.
+    Robot(std::string robotName) {
+        name = robotName;
+        batteryLevel = 100.0; // Start with a full battery.
+        std::cout << "Robot '" << name << "' has been created." << std::endl;
+    }
+
+    // A public function that orchestrates a task.
+    // It calls the private helper functions internally.
+    void performTask() {
+        // We first call the private 'isBatteryLow()' function to check the state.
+        if (isBatteryLow()) {
+            std::cout << name << ": Cannot perform task. Battery is too low." << std::endl;
+            return; // Exit the function if the battery is low.
+        }
+
+        // Now, we call the private 'calculateTaskCompletionTime()' function.
+        // We use its return value to inform the user.
+        double timeNeeded = calculateTaskCompletionTime();
+        std::cout << name << ": Starting task. This will take approximately " << timeNeeded << " seconds." << std::endl;
+        
+        // Simulating battery drain after the task.
+        batteryLevel -= 20.0;
+        std::cout << name << ": Task complete. Battery level is now " << batteryLevel << "%." << std::endl;
+    }
+
+    // A public function to get the current battery level.
+    double getBatteryLevel() const {
+        return batteryLevel;
+    }
+
+    // A public function to charge the robot.
+    void charge() {
+        batteryLevel = 100.0;
+        std::cout << name << ": Charging complete. Battery is at 100%." << std::endl;
+    }
+};
+
+// --- Main Function ---
+// This is where the program execution begins.
+int main() {
+    // 1. Create a Robot object.
+    Robot helperBot("Bumble");
+
+    // 2. Call the public function 'performTask()'.
+    // The public function handles all the internal logic for us, including
+    // calling the private helper functions. We don't need to know about them.
+    helperBot.performTask();
+    
+    // Now, let's call it again. The battery will be lower.
+    helperBot.performTask();
+    
+    // Call it one more time. The private 'isBatteryLow' function will return true,
+    // and the public function will print an error message.
+    helperBot.performTask();
+
+    // 3. Charge the robot and try again.
+    helperBot.charge();
+    helperBot.performTask();
+
+    return 0; // The program exits successfully.
+}
+
+
+```
+
+
+```
+
+// All explanations are provided as comments within the code.
+// This example demonstrates how to declare, use, and manage an array
+// as a member variable within a C++ class. This is a very common
+// practice for storing collections of data related to an object.
+
+#include <iostream>
+#include <string>
+
+// --- Class Definition ---
+// A 'Student' class to store a student's name and their test scores.
+class Student {
+private:
+    // --- Member Variables (Data) ---
+    std::string name;
+    // We declare a fixed-size array as a private member.
+    // This array can hold a maximum of 5 integer test scores.
+    // Private access ensures that the array can only be modified
+    // through controlled public member functions.
+    int testScores[5];
+    int scoreCount; // To keep track of how many scores are actually in the array.
+
+public:
+    // --- Public Member Functions (Methods) ---
+
+    // 1. Constructor
+    // Initializes the object, including the array and the score count.
+    // It's crucial to set the initial state of your array members.
+    Student(std::string studentName) {
+        name = studentName;
+        scoreCount = 0; // The array is empty initially.
+        // We can also initialize all elements to a default value (e.g., -1).
+        for (int i = 0; i < 5; ++i) {
+            testScores[i] = -1;
+        }
+    }
+
+    // 2. Function to add a score to the array.
+    // How to use: Call this function with a single score to add it to the list.
+    void addScore(int score) {
+        // We first check if there is space in the array.
+        if (scoreCount < 5) {
+            // Assign the new score to the next available position.
+            testScores[scoreCount] = score;
+            // Increment the counter to track the number of scores.
+            scoreCount++;
+            std::cout << "Score " << score << " added for " << name << "." << std::endl;
+        } else {
+            // If the array is full, we print an error message.
+            std::cout << "Error: Score array is full. Cannot add more scores." << std::endl;
+        }
+    }
+
+    // 3. Function to display all scores.
+    // How to use: Call this function to print all the scores currently stored.
+    void displayScores() const {
+        std::cout << "--- Scores for " << name << " ---" << std::endl;
+        if (scoreCount == 0) {
+            std::cout << "No scores available." << std::endl;
+        } else {
+            // We loop from 0 up to the current scoreCount to avoid accessing
+            // uninitialized parts of the array.
+            for (int i = 0; i < scoreCount; ++i) {
+                std::cout << "Test " << (i + 1) << ": " << testScores[i] << std::endl;
+            }
+        }
+        std::cout << "------------------------------" << std::endl;
+    }
+
+    // 4. Function to get a specific score by its index.
+    // How to use: Call this function with a number (index) to retrieve a score.
+    // Returns the score at the given index, or -1 if the index is invalid.
+    int getScore(int index) const {
+        // We perform a boundary check to ensure the index is valid.
+        if (index >= 0 && index < scoreCount) {
+            return testScores[index];
+        } else {
+            std::cout << "Error: Invalid score index." << std::endl;
+            return -1; // Return a value indicating failure.
+        }
+    }
+}; // End of the class definition.
+
+// --- Main Function ---
+// This is where the program's execution begins.
+int main() {
+    // 1. Create a Student object.
+    Student myStudent("Alice");
+
+    // 2. Call the 'addScore' function multiple times to populate the array.
+    myStudent.addScore(95);
+    myStudent.addScore(88);
+    myStudent.addScore(92);
+    myStudent.addScore(76);
+
+    // This will try to add a score, but the array is full.
+    myStudent.addScore(100);
+
+    // 3. Call the 'displayScores' function to see the scores.
+    myStudent.displayScores();
+
+    // 4. Call the 'getScore' function to access a specific score.
+    int firstScore = myStudent.getScore(0);
+    if (firstScore != -1) {
+        std::cout << "The first score is: " << firstScore << std::endl;
+    }
+
+    // This will cause an error because the index is out of bounds.
+    int invalidScore = myStudent.getScore(10);
+
+    return 0;
+}
+
+
+```
